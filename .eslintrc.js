@@ -25,6 +25,6 @@ module.exports = {
       'error',
       'always'
     ],
-    'no-unused-vars':'warning'
+    'no-unused-vars':'off' 
   }
 };

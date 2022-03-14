@@ -1,0 +1,12 @@
+PUT http://localhost:3001/api/notes/622e1a6374008b51182a9e3f
+Content-Type: application/json
+
+{
+    "content": "La guaguita oli esta toda sucia y se tira peos",
+    "important": true
+}
+ 
+
+
+ 
+
