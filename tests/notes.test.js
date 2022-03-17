@@ -113,7 +113,7 @@ describe('delete a note', () => {
     expect(contents).not.toContain(noteToDelete.content);
   });
 
-  test('a note that do not exist can not be deleted', async () => {
+  test('a note that do not exist can not be deleted ', async () => {
   
     await api
       .delete('/api/notes/asdasdasdasdad')
