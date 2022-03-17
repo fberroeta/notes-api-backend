@@ -2,7 +2,8 @@ module.exports = {
   'env': {
     'commonjs': true,
     'es2021': true,
-    'node': true
+    'node': true,
+    'jest': true
   },
   'extends': 'eslint:recommended',
   'parserOptions': {
@@ -25,6 +26,6 @@ module.exports = {
       'error',
       'always'
     ],
-    'no-unused-vars':'off' 
+    'no-unused-vars':'off'
   }
 };
