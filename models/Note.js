@@ -4,7 +4,11 @@ const {Schema,model} = require('mongoose');
 const noteSchema = new Schema({
   content: String,
   date: Date,
-  important: Boolean
+  important: Boolean,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref:'User'
+  }
 });
 
 //para arreglar _id y __v y dejar id y v
@@ -15,6 +19,7 @@ noteSchema.set('toJSON', {
     delete returnedObject.__v;
   }
 });
+
 //crear modelo 
 const Note = model('Note', noteSchema);
 

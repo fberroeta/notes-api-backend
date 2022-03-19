@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV='development' nodemon index.js",
     "lint": "eslint .",
     "start": "cross-env NODE_ENV='production' node index.js",
-    "test": "cross-env NODE_ENV='test' jest --silent tests/notes.test.js",
+    "test": "cross-env NODE_ENV='test' PORT=1234 jest  --verbose tests/user.test.js",
     "test:watch": "npm run test -- --watch "
   },
   "keywords": [],
@@ -22,6 +22,7 @@
   "dependencies": {
     "@sentry/node": "^6.18.2",
     "@sentry/tracing": "^6.18.2",
+    "bcrypt": "^5.0.1",
     "cors": "2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",

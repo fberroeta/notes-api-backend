@@ -9,7 +9,8 @@ const cors = require('cors');
 const Note = require('./models/Note');
 const notFound = require('./middleware/notFound');
 const handleErrors = require('./middleware/handleErrors');
-
+const usersRouter = require('./controllers/users');
+// const notesRouter = require('./controllers/notes');
 
 app.use(cors());
 app.use(express.json());
@@ -132,6 +133,9 @@ app.post('/api/notes', async (request, response,next) => {
   }
 });
 
+//ROUTER para arreglar el desorden
+app.use('/api/users', usersRouter);
+// app.use('/api/notes', notesRouter);
 app.use(notFound);
 
 // The error handler must be before any other error middleware and after all controllers
@@ -143,9 +147,12 @@ app.use(handleErrors);
 // const PORT = 3001;
 const PORT = process.env.PORT || 3001;
 
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const server = () =>
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  
+  });
 
 
 module.exports = {app,server};
+// module.exports = {app};
