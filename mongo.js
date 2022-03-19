@@ -19,9 +19,11 @@ mongoose.connect(connectionString, {
     console.log('Database connected');
   }).catch(err => {
     console.error(err);
+    console.error('asdasdsa');
   });
 
-process.on('uncaughtException', () => {
+process.on('uncaughtException', (error) => {
+  console.log('error en el servidor '+ error);
   mongoose.disconnect();
 });
 

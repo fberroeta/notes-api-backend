@@ -25,7 +25,6 @@ const Note = model('Note', noteSchema);
 
 module.exports = Note;
 
-
 // Note.find({}).then(result=>{
 //   console.log(result);
 //   mongoose.connection.close();

@@ -1,5 +1,5 @@
 const notesRouter = require('express').Router();
-const Note = require('./models/Note');
+const Note = require('../models/Note');
 
 notesRouter.post('/', async (request,response)=>{
   const {body} = request; 

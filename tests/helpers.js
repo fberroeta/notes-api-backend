@@ -3,7 +3,6 @@ const supertest = require('supertest');
 const User = require('../models/User');
 const api = supertest(app);
 
-console.log(User);
 const initialNotes = [
   {
     content: 'Hola soy la guaguita oli',

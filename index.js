@@ -1,16 +1,18 @@
 require('dotenv').config();
 require('./mongo');
+
 const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
-
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const User = require('./models/User');
 const Note = require('./models/Note');
+
 const notFound = require('./middleware/notFound');
 const handleErrors = require('./middleware/handleErrors');
 const usersRouter = require('./controllers/users');
-// const notesRouter = require('./controllers/notes');
+const notesRouter = require('./controllers/notes');
 
 app.use(cors());
 app.use(express.json());
@@ -116,17 +118,30 @@ app.delete('/api/notes/:id', async (request, response,next) => {
 
 //con async
 app.post('/api/notes', async (request, response,next) => {
-  const note = request.body;
 
-  if (!note.content)return(response.status(400).json({ error: 'required content is missing' }));
+  const 
+    {
+      content,
+      important = false,
+      userId
+    } = request.body;
+
+
+  const user = await User.findById(userId);
+  if (!content)return(response.status(400).json({ error: 'required content is missing' }));
   const newNote = new Note({ 
-    content: note.content,
-    important: note.important || false, 
+    content,
+    important, 
     date: new Date(),
+    user: user._id
   }); 
 
   try {
     const savedNote = await newNote.save();
+
+    user.notes = [...user.notes, savedNote._id];
+    await user.save();
+
     response.json(savedNote);    
   } catch (error) {
     next(error);
@@ -135,7 +150,8 @@ app.post('/api/notes', async (request, response,next) => {
 
 //ROUTER para arreglar el desorden
 app.use('/api/users', usersRouter);
-// app.use('/api/notes', notesRouter);
+app.use('/api/notes', notesRouter);
+
 app.use(notFound);
 
 // The error handler must be before any other error middleware and after all controllers
@@ -147,11 +163,9 @@ app.use(handleErrors);
 // const PORT = 3001;
 const PORT = process.env.PORT || 3001;
 
-const server = () =>
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  
-  });
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 
 module.exports = {app,server};
