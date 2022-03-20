@@ -20,7 +20,12 @@ notesRouter.get('/', async (request, response) => {
   //arreglo para el timeout en la promesa
   // await (new Promise(resolve => setTimeout(resolve, 3000)));
   // Note.find({}).then(notes=>{
-  const notes = await Note.find({}).populate('user');
+  const notes = await Note.find({}).populate('user',
+    {
+      username:1,
+      name:1
+    }
+  );
   response.json(notes);
 });
 
