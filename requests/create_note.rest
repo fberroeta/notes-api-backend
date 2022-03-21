@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/notes 
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyMzY0ZGI2ZmIyN2FiMmVhZTViMGNjNSIsInVzZXJuYW1lIjoiRmNvIiwiaWF0IjoxNjQ3ODY1Njc2fQ.CQfem4zNDVJgzAtaZcQ8iDPGqiwleCAf-Ooh-Vm1suQ
 
 {
-    "content": "Esto es una nueva nota2",
-    "important": "true",
-    "userId": "62364db6fb27ab2eae5b0cc5"
+    "content": "Esto es una nueva nota con token3",
+    "important": "true"
 }
  
 ###

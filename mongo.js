@@ -23,7 +23,7 @@ mongoose.connect(connectionString, {
   });
 
 process.on('uncaughtException', (error) => {
-  console.log('error en el servidor '+ error);
+  console.error('error en el servidor '+ error);
   mongoose.disconnect();
 });
 

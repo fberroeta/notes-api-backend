@@ -13,6 +13,7 @@ const notFound = require('./middleware/notFound');
 const handleErrors = require('./middleware/handleErrors');
 const usersRouter = require('./controllers/users');
 const notesRouter = require('./controllers/notes');
+const loginRouter = require('./controllers/login');
 
 app.use(cors());
 app.use(express.json());
@@ -42,6 +43,7 @@ app.get('/', (request, response) => {
 //ROUTER para arreglar el desorden
 app.use('/api/users', usersRouter);
 app.use('/api/notes', notesRouter);
+app.use('/api/login', loginRouter);
 
 app.use(notFound);
 

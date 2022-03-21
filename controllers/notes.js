@@ -1,25 +1,24 @@
 const notesRouter = require('express').Router();
 const Note = require('../models/Note');
+const User = require('../models/User');
+const userExtractor = require('../middleware/userExtractor');
+// notesRouter.post('/', async (request, response) => {
+//   const { body } = request;
+//   const { content, date, important } = body;
 
-notesRouter.post('/', async (request, response) => {
-  const { body } = request;
-  const { content, date, important } = body;
+//   const notes = new Note({
+//     content,
+//     date,
+//     important,
+//   });
 
-  const notes = new Note({
-    content,
-    date,
-    important,
-  });
+//   const savedNotes = await notes.save();
 
-  const savedNotes = await notes.save();
-
-  response.json(savedNotes);
-});
+//   response.json(savedNotes);
+// });
 
 notesRouter.get('/', async (request, response) => {
-  //arreglo para el timeout en la promesa
-  // await (new Promise(resolve => setTimeout(resolve, 3000)));
-  // Note.find({}).then(notes=>{
+  
   const notes = await Note.find({}).populate('user',
     {
       username:1,
@@ -45,7 +44,7 @@ notesRouter.get('/:id', (request, response, next) => {
     });
 });
 
-notesRouter.put('/:id', (request, response, next) => {
+notesRouter.put('/:id', userExtractor,(request, response, next) => {
   const { id } = request.params;
   const note = request.body;
 
@@ -60,54 +59,45 @@ notesRouter.put('/:id', (request, response, next) => {
     .catch(next);
 });
 
-// //sin async
-// // app.delete('/api/notes/:id', (request, response,next) => {
-// //   const {id} = request.params;
-
-// //   Note.findByIdAndDelete(id)
-// //     .then(()=>response.status(204).end())
-// //     .catch(next);
-
-// // });
-// //con async
-notesRouter.delete('/:id', async (request, response, next) => {
+notesRouter.delete('/:id', userExtractor, async (request, response, next) => {
   const { id } = request.params;
 
   await Note.findByIdAndDelete(id).then(() => response.status(204).end());
+});
+  
+  
+notesRouter.post('/', userExtractor, async (request, response,next) => {
+  const { 
+    content,
+    important=false
+    
+    
+  } = request.body;
 
-  // });
+  // sacar userID de request
+  const {userId} = request;
+  const user = await User.findById(userId);
 
-  // //sin async
-  // // app.post('/api/notes', (request, response,next) => {
-  // //   const note = request.body;
+  if (!content)
+    return response.status(400).json({ 
+      error: 'required "content" field is missing' 
+    });
 
-  // //   if (!note.content)return(response.status(400).json({ error: 'required content is missing' }));
-  // //   const newNote = new Note({
-  // //     content: note.content,
-  // //     important: note.important || false,
-  // //     date: new Date(),
-  // //   });
-
-  // //   newNote.save().then(savedNote =>{
-  // //     response.json(savedNote);
-  // //   }).catch(err=>next(err));
-
-  // // });
-
-  // //con async
-  // notesRouter.post('/', async (request, response,next) => {
-  const note = request.body;
-
-  if (!note.content)
-    return response.status(400).json({ error: 'required content is missing' });
   const newNote = new Note({
-    content: note.content,
-    important: note.important || false,
+    content,
     date: new Date(),
+    important,
+    user: user._id
   });
-
+  
+  
+  
   try {
     const savedNote = await newNote.save();
+  
+    user.notes = user.notes.concat(savedNote._id);
+    await user.save();
+  
     response.json(savedNote);
   } catch (error) {
     next(error);
